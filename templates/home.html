@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XSS Attacks</title>
+    <style>
+
+        .search form {
+            display: flex;
+            border: 1px solid #ddd;
+            height: 45px;
+        }
+        .search input {
+            width: 600px;
+            padding:10px;
+            border: 0;
+            height: 90%;
+            border-radius: 2px 0 0 2px
+        }
+
+        .nav-link span {
+            margin-left: 15px;
+        }
+
+
+        input:focus {
+            outline: none;
+            border: 1px solid #ddd;
+        }
+
+        .search button {
+            height: 100%;
+            width: 60px;
+            border: none;
+        }
+
+
+        .video {
+            width: 270px;
+            margin-bottom: 30px;
+        }
+
+        .thumbnail img {
+            object-fit: cover;
+            height: 94%;
+            width: 100%;
+        }
+
+        .author img {
+            object-fit: cover;
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .details {
+            display: flex;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title h3 {
+            color: rgb(3, 3, 3);
+            line-height: 18px;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .title a,
+        span {
+            text-decoration: none;
+            color: rgb(96, 96, 96);
+            font-size: 12px;
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+
+<div>
+    <form>
+        <label>
+            <input type="text" placeholder="Search" style="height: 40px; width: 600px" />
+        </label>
+
+        <button style="height: 40px; width: 50px">search</button>
+
+    </form>
+</div>
+
+<br><br>
+
+<div style="margin: 20px">
+
+    <div class="video">
+
+        <iframe width="500" height="355"
+                src="https://www.youtube.com/embed/bP9gMpl1gyQ">
+        </iframe>
+
+
+        <div class="details">
+            <div class="author">
+                <img src="https://upload.wikimedia.org/wikipedia/en/2/23/Lofi_girl_logo.jpg" alt=""/>
+            </div>
+
+            <div class="title">
+                <h3 id="video_title">
+                    Music
+                </h3>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<form action="{% url 'submit_comment' %}" method="get">
+
+    {% csrf_token %}
+
+    <label>
+        <input type="text" name="comment" value=""
+               placeholder="Enter your comments" style="height: 40px; width: 500px;" />
+
+    </label>
+    <button type="submit" style="width: 50px; height: 45px" >Submit</button>
+
+</form>
+
+{% for comment in comments %}
+    <div>
+    <table>
+        <tr>
+            <td><img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" height="40px" width="40px" alt=""></td>
+        </tr>
+
+        <tr>
+            {% autoescape off %}
+                <td><h5>{{ comment }}</h5></td>
+            {% endautoescape %}
+        </tr>
+
+    </table>
+    <hr>
+
+</div>
+{% endfor %}
+
+</body>
+</html>
